@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace SharpTox.Av.Filter
 {
-    internal class FilterAudioFunctions
+    internal static class FilterAudioFunctions
     {
         const string dllName = "filter_audio.dll";
 
@@ -15,5 +15,11 @@ namespace SharpTox.Av.Filter
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "filter_audio")]
         internal static extern int FilterAudio(FilterAudioHandle filterAudio, short[] data, uint samples);
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pass_audio_output")]
+        internal static extern int PassAudioOutput(FilterAudioHandle filterAudio, short[] data, uint samples);
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "set_echo_delay_ms")]
+        internal static extern int SetEchoDelayMs(FilterAudioHandle filterAudio, short msInSndCardBuf);
     }
 }
