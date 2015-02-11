@@ -21,5 +21,8 @@ namespace SharpTox.Av.Filter
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "set_echo_delay_ms")]
         internal static extern int SetEchoDelayMs(FilterAudioHandle filterAudio, short msInSndCardBuf);
+
+		[DllImport(dllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "enable_disable_filters")]
+		internal static extern int EnableDisableFilters(FilterAudioHandle filterAudio, int echo, int voice, int grain);
     }
 }

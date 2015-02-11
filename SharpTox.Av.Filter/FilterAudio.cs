@@ -9,7 +9,7 @@ namespace SharpTox.Av.Filter
     {
         private bool _disposed;
         private int _sampleRate;
-        private FilterAudioHandle _filterAudio;
+        private readonly FilterAudioHandle _filterAudio;
 
         /// <summary>
         /// The amount of time in ms it takes for audio to be played and recorded back after.
@@ -24,6 +24,82 @@ namespace SharpTox.Av.Filter
                 FilterAudioFunctions.SetEchoDelayMs(_filterAudio, value);
             }
         }
+
+		private bool _echoFilterEnabled = true;
+		private bool _voiceFilterEnabled = true;
+		private bool _grainFilterEnabled = true;
+
+		/// <summary>
+		/// Whether or not echo filtering is enabled.
+		/// </summary>
+		/// <value></value>
+		public bool EchoFilterEnabled
+		{
+			get
+			{
+				return _echoFilterEnabled;
+			}
+			set
+			{
+				if (_disposed)
+					throw new ObjectDisposedException(GetType().FullName);
+
+				_echoFilterEnabled = value;
+				FilterAudioFunctions.EnableDisableFilters(_filterAudio, value ? 1 : 0, VoiceFilterEnabled ? 1 : 0, GrainFilterEnabled ? 1 : 0);
+			}
+		}
+
+		/// <summary>
+		/// Whether or not voice filtering is enabled.
+		/// </summary>
+		/// <value></value>
+		public bool VoiceFilterEnabled
+		{
+			get
+			{
+				return _voiceFilterEnabled;
+			}
+			set
+			{
+				if (_disposed)
+					throw new ObjectDisposedException(GetType().FullName);
+
+				_voiceFilterEnabled = value;
+				FilterAudioFunctions.EnableDisableFilters(_filterAudio, EchoFilterEnabled ? 1 : 0, value ? 1 : 0, GrainFilterEnabled ? 1 : 0);
+			}
+		}
+
+		/// <summary>
+		/// Whether or not grain filtering is enabled.
+		/// </summary>
+		/// <value></value>
+		public bool GrainFilterEnabled
+		{
+			get
+			{
+				return _grainFilterEnabled;
+			}
+			set
+			{
+				if (_disposed)
+					throw new ObjectDisposedException(GetType().FullName);
+
+				_grainFilterEnabled = value;
+				FilterAudioFunctions.EnableDisableFilters(_filterAudio, EchoFilterEnabled ? 1 : 0, VoiceFilterEnabled ? 1 : 0, value ? 1 : 0);
+			}
+		}
+
+		/// <summary>
+		/// The sample rate for this instance of FilterAudio.
+		/// </summary>
+		/// <value></value>
+		public int SampleRate
+		{
+			get
+			{
+				return _sampleRate;
+			}
+		}
 
         /// <summary>
         /// Initialises a new instance of filter_audio.
